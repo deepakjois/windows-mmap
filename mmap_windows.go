@@ -14,12 +14,16 @@ func trymmap(fd *os.File, size int64) ([]byte, error) {
 	protect := syscall.PAGE_READONLY
 	access := syscall.FILE_MAP_READ
 
-	// FIXME Bolt has this in its Windows mmap-ing code.
-	// Not sure if we need it.
-	//
+	fi, err := fd.Stat()
+	if err != nil {
+		return nil, err
+	}
+
 	// Truncate the database to the size of the mmap.
-	if err := fd.Truncate(size); err != nil {
-		return nil, fmt.Errorf("truncate: %s", err)
+	if fi.Size() < size {
+		if err := fd.Truncate(size); err != nil {
+			return nil, fmt.Errorf("truncate: %s", err)
+		}
 	}
 
 	// Open a file mapping handle.
