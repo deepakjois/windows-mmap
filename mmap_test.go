@@ -10,7 +10,7 @@ func TestMmap(t *testing.T) {
 	y.Check(err)
 	fi, err := f.Stat()
 	y.Check(err)
-	err = trymmap(f, fi.Size())
+	_, err = trymmap(f, fi.Size())
 	if err != nil {
 		t.Errorf("mmap failed with error: %v", err)
 	}

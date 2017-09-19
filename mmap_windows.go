@@ -6,7 +6,7 @@ import (
 	"unsafe"
 )
 
-func trymmap(fd *os.File, size int64) error {
+func trymmap(fd *os.File, size int64) ([]byte, error) {
 	protect := syscall.PAGE_READONLY
 	access := syscall.FILE_MAP_READ
 
