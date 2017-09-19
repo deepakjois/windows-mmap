@@ -1,10 +1,16 @@
 package winmmap
 
 import "testing"
+import "os"
+import "github.com/dgraph-io/badger/y"
 
 func TestMmap(t *testing.T) {
 	t.Log("Trying mmap")
-	err := trymmap()
+	f, err := os.Open("README.md")
+	y.Check(err)
+	fi, err := f.Stat()
+	y.Check(err)
+	err = trymmap(f, fi.Size())
 	if err != nil {
 		t.Errorf("mmap failed with error: %v", err)
 	}
