@@ -6,7 +6,7 @@ import "github.com/dgraph-io/badger/y"
 
 func TestMmap(t *testing.T) {
 	t.Log("Trying mmap")
-	f, err := os.Open("README.md")
+	f, err := os.OpenFile("README.md", os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0777)
 	y.Check(err)
 	fi, err := f.Stat()
 	y.Check(err)
