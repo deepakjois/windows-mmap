@@ -3,6 +3,7 @@
 package winmmap
 
 import (
+	"math"
 	"os"
 	"syscall"
 	"unsafe"
@@ -37,10 +38,10 @@ func trymmap(fd *os.File, size int64) ([]byte, error) {
 	}
 
 	// Close mapping handle.
-	if err := syscall.CloseHandle(syscall.Handle(h)); err != nil {
-		return os.NewSyscallError("CloseHandle", err)
+	if err := syscall.CloseHandle(syscall.Handle(handler)); err != nil {
+		return nil, os.NewSyscallError("CloseHandle", err)
 	}
 
-	data := (*[size]byte)(unsafe.Pointer(addr))[:size]
+	data := (*[math.MaxUint32]byte)(unsafe.Pointer(addr))[:size]
 	return data, nil
 }
