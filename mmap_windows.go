@@ -30,7 +30,7 @@ func trymmap(fd *os.File, size int64) ([]byte, error) {
 	handler, err := syscall.CreateFileMapping(syscall.Handle(fd.Fd()), nil,
 		uint32(protect), sizelo, sizehi, nil)
 	if err != nil {
-		return nil, os.NewSyscallError("CreateFileMapping", errno)
+		return nil, os.NewSyscallError("CreateFileMapping", err)
 	}
 
 	addr, err := syscall.MapViewOfFile(handler, uint32(access), 0, 0, uintptr(size))
