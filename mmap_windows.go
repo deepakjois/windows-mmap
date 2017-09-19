@@ -19,7 +19,7 @@ func trymmap(fd *os.File, size int64) ([]byte, error) {
 	//
 	// Truncate the database to the size of the mmap.
 	if err := fd.Truncate(size); err != nil {
-		return fmt.Errorf("truncate: %s", err)
+		return nil, fmt.Errorf("truncate: %s", err)
 	}
 
 	// Open a file mapping handle.
@@ -30,7 +30,7 @@ func trymmap(fd *os.File, size int64) ([]byte, error) {
 	handler, err := syscall.CreateFileMapping(syscall.Handle(fd.Fd()), nil,
 		uint32(protect), sizelo, sizehi, nil)
 	if err != nil {
-		return nil, err
+		return nil, os.NewSyscallError("CreateFileMapping", errno)
 	}
 
 	addr, err := syscall.MapViewOfFile(handler, uint32(access), 0, 0, uintptr(size))
