@@ -3,6 +3,7 @@
 package winmmap
 
 import (
+	"fmt"
 	"math"
 	"os"
 	"syscall"
@@ -17,9 +18,9 @@ func trymmap(fd *os.File, size int64) ([]byte, error) {
 	// Not sure if we need it.
 	//
 	// Truncate the database to the size of the mmap.
-	//if err := fd.Truncate(size); err != nil {
-	//	return fmt.Errorf("truncate: %s", err)
-	//}
+	if err := fd.Truncate(size); err != nil {
+		return fmt.Errorf("truncate: %s", err)
+	}
 
 	// Open a file mapping handle.
 	sizelo := uint32(size >> 32)
